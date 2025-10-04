@@ -1,0 +1,38 @@
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(42, 41, 41);
+    color: white;
+}
+
+h1 {
+    text-align: center;
+}
+
+input {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 4px;
+    width: auto;
+    min-width: 2ch;
+    max-width: 4ch;
+}
+
+button {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+table,
+th,
+td {
+    border: 1px solid;
+    padding: 4px;
+    margin: 4px;
+    border-collapse: collapse;
+}
+
+#inputField {
+    width: auto;
+    max-width: fit-content;
+}

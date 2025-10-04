@@ -1,0 +1,1 @@
+# Score app für das Karten Spiel Skyjo
