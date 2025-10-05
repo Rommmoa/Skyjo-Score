@@ -7,6 +7,20 @@ const tableBody = document.getElementById("tableBody"); // Der Body der Tabelle 
 // Startet bei 0, wird bei jedem addPlayer() erhöht
 let playerCount = 0;
 
+// Counter für Rundennummer - startet bei 1 und wird bei jeder neuen Runde erhöht
+let counter = 1;
+
+let saveTimeout;
+let roundData = [];
+
+// Struktur:
+// rundenDaten = [
+//   [10, 15, 20],   // Runde 1: Punkte für Spieler 1, 2, 3
+//   [5, -5, 12]     // Runde 2
+// ]
+
+let playerArray = [];
+
 function createPlayerInDOM(name, id) {
   tablePlayerRow.innerHTML += `<th id="${id}id">${name}</th>`;
   const totalRow = document.getElementById("totalRow");
@@ -17,7 +31,7 @@ function createPlayerInDOM(name, id) {
 function addPlayer() {
   if (inputField.value.trim() !== "") {
     playerCount++;
-    spielerArray.push(inputField.value);
+    playerArray.push(inputField.value);
 
     createPlayerInDOM(inputField.value, playerCount); // Nutze Hilfsfunktion
 
@@ -28,45 +42,28 @@ function addPlayer() {
   }
 }
 
-// Counter für Rundennummer - startet bei 1 und wird bei jeder neuen Runde erhöht
-let counter = 1;
+function createRoundInDOM(roundNumber, values) {
+  let rowHtml = `<tr><th>Runde ${roundNumber}</th>`;
 
-let saveTimeout;
-let rundenDaten = [];
-
-// Struktur:
-// rundenDaten = [
-//   [10, 15, 20],   // Runde 1: Punkte für Spieler 1, 2, 3
-//   [5, -5, 12]     // Runde 2
-// ]
-
-// Funktion die ausgeführt wird wenn "Neue Runde"-Button geklickt wird
-function newRound() {
-  // Check ob überhaupt Spieler existieren
-  if (playerCount === 0) {
-    alert("Bitte erst Spieler hinzufügen!");
-    return; // Funktion beenden wenn keine Spieler
-  }
-
-  // HTML für neue Runde zusammenbauen
-  // Startet mit <tr> und Rundennummer
-  let rowHtml = `<tr><th>Runde ${counter}</th>`;
-
-  // Für jeden Spieler ein Input-Feld erstellen
-  // Loop startet bei 1 weil playerCount bei 1 startet
   for (let i = 1; i <= playerCount; i++) {
-    // Jedes Input bekommt class="player1", "player2" etc. - damit wir später alle Inputs eines Spielers finden können
-    // type="number" zeigt Zahlen-Tastatur auf Handy
-    // onchange ruft calculateTotals() auf sobald User einen Wert eingibt
-    rowHtml += `<td><input class="player${i}" type="number" placeholder="0" onchange="calculateTotals()"/></td>`;
+    const value = values[i - 1] || ""; // Wert aus Array holen, oder leer falls nicht vorhanden
+    rowHtml += `<td><input class="player${i}" type="number" placeholder="0" value="${value}" onchange="calculateTotals()"/></td>`;
   }
   rowHtml += `</tr>`;
 
-  // Neue Zeile zur Tabelle hinzufügen
-  // insertAdjacentHTML statt innerHTML += damit bestehende Input-Werte nicht verloren gehen
   tableBody.insertAdjacentHTML("beforeend", rowHtml);
+}
 
-  // Rundencounter erhöhen für nächste Runde
+// Funktion die ausgeführt wird wenn "Neue Runde"-Button geklickt wird
+function newRound() {
+  if (playerCount === 0) {
+    alert("Bitte erst Spieler hinzufügen!");
+    return;
+  }
+
+  const emptyValues = new Array(playerCount).fill(""); // Leeres Array für neue Runde
+  createRoundInDOM(counter, emptyValues);
+
   counter++;
   saveGame();
 }
@@ -122,7 +119,7 @@ function saveGame() {
   });
 
   // Array in den localStorage speichern
-  localStorage.setItem("spieler", JSON.stringify(playerNames));
+  localStorage.setItem("playerNames", JSON.stringify(playerNames));
 
   // Runden Daten speichern
   let roundData = [];
@@ -143,7 +140,7 @@ function saveGame() {
 }
 
 function loadGame() {
-  const savedPlayers = localStorage.getItem("player");
+  const savedPlayers = localStorage.getItem("playerNames");
 
   if (!savedPlayers) {
     return; // Keine Daten → nichts zu laden
@@ -159,6 +156,13 @@ function loadGame() {
   playerArray.forEach((name, index) => {
     createPlayerInDOM(name, index + 1);
   });
+
+  // Runden aufbauen - DAS FEHLT BEI DIR
+  roundData.forEach((runde, index) => {
+    createRoundInDOM(index + 1, runde);
+  });
+
+  calculateTotals(); // Totals neu berechnen
 }
 
 // Beim Seitenstart aufrufen
