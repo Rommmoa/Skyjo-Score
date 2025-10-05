@@ -1,38 +1,45 @@
+/* Generelle Styles für die ganze Seite */
 body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-color: rgb(42, 41, 41);
-    color: white;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Schriftart - falls Segoe UI nicht verfügbar, nimmt Browser die nächste */
+  background-color: rgb(42, 41, 41); /* Dunkler Grau-Hintergrund */
+  color: white; /* Standard-Textfarbe weiß (gut für dunklen Hintergrund) */
 }
 
+/* Überschrift zentrieren */
 h1 {
-    text-align: center;
+  text-align: center;
 }
 
+/* Styles für ALLE Input-Felder (betrifft sowohl Spielername-Input als auch Punkte-Inputs) */
 input {
-    border: 1px solid black;
-    border-radius: 8px;
-    padding: 4px;
-    width: auto;
-    min-width: 2ch;
-    max-width: 4ch;
+  border: 1px solid black; /* Schwarzer Rahmen, 1px dick */
+  border-radius: 8px; /* Abgerundete Ecken */
+  padding: 4px; /* Innenabstand damit Text nicht am Rand klebt */
+  width: auto; /* Breite passt sich Inhalt an */
+  min-width: 2ch; /* Mindestens 2 Zeichen breit (ch = character width) */
+  max-width: 4ch; /* Maximal 4 Zeichen breit - hält Punkte-Inputs klein */
 }
 
+/* Styles für ALLE Buttons */
 button {
-    border: 1px solid black;
-    border-radius: 8px;
-    padding: 4px;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 4px;
 }
 
+/* Styles für Tabelle und alle Zellen */
 table,
-th,
+th,  /* Table Header (Spielernamen, "Runde 1", "Total") */
 td {
-    border: 1px solid;
-    padding: 4px;
-    margin: 4px;
-    border-collapse: collapse;
+  /* Table Data (Punkte-Inputs) */
+  border: 1px solid; /* Rahmen um jede Zelle */
+  padding: 4px; /* Innenabstand in Zellen */
+  margin: 4px; /* Außenabstand */
+  border-collapse: collapse; /* Verhindert doppelte Borders zwischen Zellen */
 }
 
+/* Spezifischer Style nur für das Spielername-Input-Feld */
 #inputField {
-    width: auto;
-    max-width: fit-content;
+  width: auto;
+  max-width: fit-content; /* Breite passt sich Inhalt an, nicht auf 4ch limitiert wie andere Inputs */
 }

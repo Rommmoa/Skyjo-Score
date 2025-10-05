@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skyjo Score</title>
-    <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-<h1>Skyjo Score</h1>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Skyjo Score</h1>
 
-<input id="inputField" type="text" placeholder="Spieler Namen eingeben"/>
-<button onclick="addPlayer()">Hinzufügen</button>
-<table>
-    <thead>
-    <tr id="tablePlayerRow">
-        <th>Spieler</th>
-    </tr>
-    </thead>
-    <tbody id="tableBody">
-    <!-- Neue Runden -->
-    </tbody>
-    <tfoot>
-    <tr id="totalRow">
-        <th>Total</th>
-    </tr>
-    </tfoot>
-</table>
+    <input id="inputField" type="text" placeholder="Spieler Namen eingeben" />
+    <button onclick="addPlayer()">Hinzufügen</button>
+    <table>
+      <thead>
+        <tr id="tablePlayerRow">
+          <th>Spieler</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Neue Runden -->
+      </tbody>
+      <tfoot>
+        <tr id="totalRow">
+          <th>Total</th>
+        </tr>
+      </tfoot>
+    </table>
 
-<button onclick="newRound()">Neue Runde</button>
+    <button onclick="newRound()">Neue Runde</button>
 
-<script src="index.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
