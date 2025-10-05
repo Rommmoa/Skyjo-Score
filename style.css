@@ -49,3 +49,10 @@ td,
 th {
   border-left: 2px solid white;
 }
+
+button img {
+  width: 14px; /* passt sich der Textgröße optisch an */
+  height: 14px;
+  vertical-align: middle;
+  filter: brightness(0); /* macht das Icon schwarz */
+}
