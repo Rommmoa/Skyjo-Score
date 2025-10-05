@@ -131,24 +131,6 @@ function showWinner(allTotals) {
   alert(message);
 }
 
-function showWinner(allTotals) {
-  // Sortiere nach Punkten (niedrigste zuerst)
-  allTotals.sort((a, b) => a.punkte - b.punkte);
-
-  const gewinner = allTotals[0]; // Niedrigste Punktzahl
-  const verlierer = allTotals[allTotals.length - 1]; // Höchste Punktzahl
-
-  let message = `Spiel zu Ende!\n\n`;
-  message += `🏆 Gewinner: ${gewinner.spieler} mit ${gewinner.punkte} Punkten\n`;
-  message += `❌ Verlierer: ${verlierer.spieler} mit ${verlierer.punkte} Punkten\n\n`;
-  message += `Endstand:\n`;
-  allTotals.forEach((s, index) => {
-    message += `${index + 1}. ${s.spieler}: ${s.punkte} Punkte\n`;
-  });
-
-  alert(message);
-}
-
 function saveGame() {
   // Leerer Array für Spieler
   let playerNames = [];
