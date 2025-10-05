@@ -43,3 +43,9 @@ td {
   width: auto;
   max-width: fit-content; /* Breite passt sich Inhalt an, nicht auf 4ch limitiert wie andere Inputs */
 }
+
+/* Dickere vertikale Borders zwischen Spieler-Spalten */
+td,
+th {
+  border-left: 2px solid white;
+}
