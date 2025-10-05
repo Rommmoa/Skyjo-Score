@@ -7,32 +7,38 @@ const tableBody = document.getElementById("tableBody"); // Der Body der Tabelle 
 // Startet bei 0, wird bei jedem addPlayer() erhöht
 let playerCount = 0;
 
+function createPlayerInDOM(name, id) {
+  tablePlayerRow.innerHTML += `<th id="${id}id">${name}</th>`;
+  const totalRow = document.getElementById("totalRow");
+  totalRow.innerHTML += `<td id="total${id}">0</td>`;
+}
+
 // Funktion die ausgeführt wird wenn "Hinzufügen"-Button geklickt wird
 function addPlayer() {
-  // Check ob Input nicht leer ist (trim() entfernt Leerzeichen am Anfang/Ende)
   if (inputField.value.trim() !== "") {
-    // Spielerzahl erhöhen (IDs starten bei 1, nicht 0)
     playerCount++;
+    spielerArray.push(inputField.value);
 
-    // Neue Spalte zur Header-Zeile hinzufügen mit Spielername
-    // ID format: "1id", "2id", "3id" etc.
-    tablePlayerRow.innerHTML += `<th id="${playerCount}id">${inputField.value}</th>`;
+    createPlayerInDOM(inputField.value, playerCount); // Nutze Hilfsfunktion
 
-    // Total-Zeile im Footer holen und neue Zelle für diesen Spieler hinzufügen
-    const totalRow = document.getElementById("totalRow");
-    // Jede Total-Zelle hat ID "total1", "total2", etc. - startet mit 0 Punkten
-    totalRow.innerHTML += `<td id="total${playerCount}">0</td>`;
-
-    // Input-Feld leeren nach Hinzufügen
     inputField.value = "";
-    saveGame();
+
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveGame, 500);
   }
 }
 
 // Counter für Rundennummer - startet bei 1 und wird bei jeder neuen Runde erhöht
 let counter = 1;
 
+let saveTimeout;
+let rundenDaten = [];
 
+// Struktur:
+// rundenDaten = [
+//   [10, 15, 20],   // Runde 1: Punkte für Spieler 1, 2, 3
+//   [5, -5, 12]     // Runde 2
+// ]
 
 // Funktion die ausgeführt wird wenn "Neue Runde"-Button geklickt wird
 function newRound() {
@@ -93,6 +99,12 @@ function calculateTotals() {
     // Total-Zelle für diesen Spieler updaten mit berechneter Summe
     document.getElementById(`total${i}`).textContent = total;
   }
+
+  // Debounce: Nach 500ms ohne weiteren Input → speichern
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => {
+    saveGame();
+  }, 500);
 }
 
 function saveGame() {
@@ -111,4 +123,43 @@ function saveGame() {
 
   // Array in den localStorage speichern
   localStorage.setItem("spieler", JSON.stringify(playerNames));
+
+  // Runden Daten speichern
+  let roundData = [];
+  const rows = tableBody.querySelectorAll("tr");
+
+  rows.forEach((row) => {
+    let roundPoints = [];
+    const inputs = row.querySelectorAll("input");
+    inputs.forEach((input) => {
+      roundPoints.push(input.value);
+    });
+    roundData.push(roundPoints);
+  });
+
+  localStorage.setItem("rounds", JSON.stringify(roundData));
+  localStorage.setItem("playerCount", playerCount);
+  localStorage.setItem("counter", counter);
 }
+
+function loadGame() {
+  const savedPlayers = localStorage.getItem("player");
+
+  if (!savedPlayers) {
+    return; // Keine Daten → nichts zu laden
+  }
+
+  // Daten laden
+  playerArray = JSON.parse(savedPlayers);
+  const roundData = JSON.parse(localStorage.getItem("rounds"));
+  playerCount = parseInt(localStorage.getItem("playerCount"));
+  counter = parseInt(localStorage.getItem("counter"));
+
+  // TODO: DOM aufbauen
+  playerArray.forEach((name, index) => {
+    createPlayerInDOM(name, index + 1);
+  });
+}
+
+// Beim Seitenstart aufrufen
+window.addEventListener("DOMContentLoaded", loadGame);
