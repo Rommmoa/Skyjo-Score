@@ -165,5 +165,20 @@ function loadGame() {
   calculateTotals(); // Totals neu berechnen
 }
 
+function reset() {
+  localStorage.clear();
+
+  playerCount = 0;
+  counter = 1;
+  playerArray = [];
+  roundData = [];
+
+  tablePlayerRow.innerHTML = "";
+  tableBody.innerHTML = "";
+  document.getElementById("totalRow").innerHTML = "";
+
+  location.reload();
+}
+
 // Beim Seitenstart aufrufen
 window.addEventListener("DOMContentLoaded", loadGame);
