@@ -25,11 +25,14 @@ function addPlayer() {
 
     // Input-Feld leeren nach Hinzufügen
     inputField.value = "";
+    saveGame();
   }
 }
 
 // Counter für Rundennummer - startet bei 1 und wird bei jeder neuen Runde erhöht
 let counter = 1;
+
+
 
 // Funktion die ausgeführt wird wenn "Neue Runde"-Button geklickt wird
 function newRound() {
@@ -59,6 +62,7 @@ function newRound() {
 
   // Rundencounter erhöhen für nächste Runde
   counter++;
+  saveGame();
 }
 
 // Funktion die Total-Punkte für jeden Spieler berechnet
@@ -89,4 +93,22 @@ function calculateTotals() {
     // Total-Zelle für diesen Spieler updaten mit berechneter Summe
     document.getElementById(`total${i}`).textContent = total;
   }
+}
+
+function saveGame() {
+  // Leerer Array für Spieler
+  let playerNames = [];
+
+  // alles <th> aus der spieler reihe finden außer "Spieler"
+  const headers = tablePlayerRow.querySelectorAll("th");
+
+  //durch jedes <th> gehen und Text rausholen
+  headers.forEach((th, index) => {
+    if (index > 0) {
+      playerNames.push(th.textContent);
+    }
+  });
+
+  // Array in den localStorage speichern
+  localStorage.setItem("spieler", JSON.stringify(playerNames));
 }
