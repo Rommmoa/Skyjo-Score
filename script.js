@@ -71,37 +71,82 @@ function newRound() {
 // Funktion die Total-Punkte für jeden Spieler berechnet
 // Wird automatisch aufgerufen wenn User einen Wert in ein Input-Feld eingibt (via onchange)
 function calculateTotals() {
-  // Für jeden Spieler...
+  console.log("calculateTotals wird aufgerufen");
+
+  let gameOver = false;
+  let allTotals = [];
+
   for (let i = 1; i <= playerCount; i++) {
-    // Alle Input-Felder dieses Spielers finden (über class="player1", "player2" etc.)
     const inputs = document.querySelectorAll(`.player${i}`);
-    let total = 0; // Total für diesen Spieler
+    let total = 0;
 
-    // Durch alle Inputs dieses Spielers gehen
     inputs.forEach((input) => {
-      let value = input.value; // Wert aus Input-Feld holen
-
-      // SPEZIAL: Punkt-Konvention für negative Zahlen
-      // Wenn User ".5" eingibt, wird daraus "-5"
-      // Grund: Handy-Tastatur bei type="number" hat kein Minus-Zeichen
+      let value = input.value;
       if (value.startsWith(".")) {
-        value = "-" + value.substring(1); // ".5" → "-5"
+        value = "-" + value.substring(1);
       }
-
-      // String zu Number konvertieren und zu total addieren
-      // parseFloat() für Dezimalzahlen, || 0 falls Input leer ist
       total += parseFloat(value) || 0;
     });
 
-    // Total-Zelle für diesen Spieler updaten mit berechneter Summe
     document.getElementById(`total${i}`).textContent = total;
+
+    console.log(`Spieler ${i}: ${total} Punkte`);
+
+    allTotals.push({ spieler: playerArray[i - 1], punkte: total });
+
+    if (total >= 100) {
+      console.log(`Spieler ${i} hat >= 100!`);
+      gameOver = true;
+    }
   }
 
-  // Debounce: Nach 500ms ohne weiteren Input → speichern
+  console.log("gameOver:", gameOver);
+
+  if (gameOver) {
+    console.log("showWinner wird aufgerufen");
+    showWinner(allTotals);
+  }
+
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(() => {
     saveGame();
   }, 500);
+}
+
+function showWinner(allTotals) {
+  // Sortiere nach Punkten (niedrigste zuerst)
+  allTotals.sort((a, b) => a.punkte - b.punkte);
+
+  const gewinner = allTotals[0]; // Niedrigste Punktzahl
+  const verlierer = allTotals[allTotals.length - 1]; // Höchste Punktzahl
+
+  let message = `Spiel zu Ende!\n\n`;
+  message += `🏆 Gewinner: ${gewinner.spieler} mit ${gewinner.punkte} Punkten\n`;
+  message += `❌ Verlierer: ${verlierer.spieler} mit ${verlierer.punkte} Punkten\n\n`;
+  message += `Endstand:\n`;
+  allTotals.forEach((s, index) => {
+    message += `${index + 1}. ${s.spieler}: ${s.punkte} Punkte\n`;
+  });
+
+  alert(message);
+}
+
+function showWinner(allTotals) {
+  // Sortiere nach Punkten (niedrigste zuerst)
+  allTotals.sort((a, b) => a.punkte - b.punkte);
+
+  const gewinner = allTotals[0]; // Niedrigste Punktzahl
+  const verlierer = allTotals[allTotals.length - 1]; // Höchste Punktzahl
+
+  let message = `Spiel zu Ende!\n\n`;
+  message += `🏆 Gewinner: ${gewinner.spieler} mit ${gewinner.punkte} Punkten\n`;
+  message += `❌ Verlierer: ${verlierer.spieler} mit ${verlierer.punkte} Punkten\n\n`;
+  message += `Endstand:\n`;
+  allTotals.forEach((s, index) => {
+    message += `${index + 1}. ${s.spieler}: ${s.punkte} Punkte\n`;
+  });
+
+  alert(message);
 }
 
 function saveGame() {
